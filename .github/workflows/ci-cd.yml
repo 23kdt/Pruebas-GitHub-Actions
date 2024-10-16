@@ -2,7 +2,7 @@ name: CICD Alfred
 
 on:
   pull_request:
-    branches: [develop] #Preguntar si en develop o sobre cualquier rama
+ #Preguntar si en develop o sobre cualquier rama
   push:
     branches: [develop]
 
