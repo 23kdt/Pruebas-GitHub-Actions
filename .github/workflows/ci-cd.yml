@@ -25,7 +25,7 @@ jobs:
         cache: true
 
     - name: Install dependencies
-      run: make kustomize controller-gen envtest golangci-lint
+      run: make controller-gen envtest golangci-lint
 
     - name: Run go linter #Sino hacerlo con https://github.com/marketplace/actions/golangci-lint
       run: |
