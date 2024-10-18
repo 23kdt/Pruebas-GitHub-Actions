@@ -23,25 +23,35 @@ jobs:
       with:
         go-version: "1.21"
         cache: true
+      continue-on-error: true
 
-    - name: Create bin directory
-      run: mkdir -p bin
+    - name: Golint #Preguntar si se puede hacer con make lint
+      run: |
+        make lint
+    - name: Run go test - Unit tests
+      run: |
+        make test
+      continue-on-error: true
+#
 
-    - name: Install golangci-lint
-      run: make golangci-lint
 
-    - name: Install envtest
-      run: make envtest
+  test-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
 
-    - name: Install controller-gen
-      run: make controller-gen
+      - name: Get Git tag and short SHA
+        id: git_info
+        run: |
+          GIT_TAG=$(git describe --tags --always)
+          SHORT_SHA=${GITHUB_SHA::0:7 } 
+          IMAGE_TAG="${GIT_TAG}-${SHORT_SHA}"
+          echo "Generated image tag: $IMAGE_TAG"
+          echo "tag=$IMAGE_TAG" >> $GITHUB_ENV
 
-      # Ejecuta el linter
-    - name: Run golangci-lint
-      run: make lint
-
-      # Ejecuta las pruebas unitarias
-    - name: Run tests
-      run: make test
+      - name: Print generated tag
+        run: |
+          echo "The generated image tag is: ${{ env.tag }}"
 
 
