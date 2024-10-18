@@ -37,7 +37,7 @@ jobs:
 
   test-tag:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Git checkout
         uses: actions/checkout@v4
@@ -45,9 +45,7 @@ jobs:
       - name: Get Git tag and short SHA
         id: git_info
         run: |
-          GIT_TAG=$(git describe --tags --always)
-          SHORT_SHA=${GITHUB_SHA:0:7 } 
-          IMAGE_TAG="${GIT_TAG}-${SHORT_SHA}"
+          IMAGE_TAG=$(git describe --tags --always)
           echo "Generated image tag: $IMAGE_TAG"
           echo "tag=$IMAGE_TAG" >> $GITHUB_ENV
 
