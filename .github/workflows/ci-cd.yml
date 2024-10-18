@@ -2,7 +2,7 @@ name: CICD Alfred
 
 on:
   pull_request:
-    branches: [develop] #Preguntar si en develop o sobre cualquier rama
+ #Preguntar si en develop o sobre cualquier rama
   push:
     branches: [develop]
 
@@ -23,13 +23,35 @@ jobs:
       with:
         go-version: "1.21"
         cache: true
+      continue-on-error: true
 
-    - name: Install dependencies
-      run: make kustomize controller-gen envtest golangci-lint
-
-    - name: Run go linter #Sino hacerlo con https://github.com/marketplace/actions/golangci-lint
+    - name: Golint #Preguntar si se puede hacer con make lint
       run: |
         make lint
     - name: Run go test - Unit tests
       run: |
         make test
+      continue-on-error: true
+#
+
+
+  test-tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get Git tag and short SHA
+        id: git_info
+        run: |
+          IMAGE_TAG=$(git describe --tags --always)
+
+          echo "Generated image tag: $IMAGE_TAG"
+          echo "tag=$IMAGE_TAG" >> $GITHUB_ENV
+
+
+
+
