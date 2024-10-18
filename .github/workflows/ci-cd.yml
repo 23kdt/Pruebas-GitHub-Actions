@@ -41,6 +41,8 @@ jobs:
     steps:
       - name: Git checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Get Git tag and short SHA
         id: git_info
